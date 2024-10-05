@@ -1,85 +1,100 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Desafio Técnico - Desenvolvedor Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Contexto
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Você foi contratado para desenvolver a API backend de um sistema de livraria. Este sistema deve permitir o gerenciamento de livros, autores e pedidos, fornecendo endpoints RESTful para atender a essas funcionalidades. O objetivo é construir uma API que permita a criação, consulta, atualização e exclusão (CRUD) de recursos, além de realizar buscas filtradas e possibilitar a compra de livros.
 
-## Description
+## Requisitos do Desafio
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### 1. Configuração do Ambiente
 
-## Project setup
+- Utilize **Node.js**, **Python (Django)**, **Java (Spring Boot)**, ou qualquer outra tecnologia backend de sua escolha.
+- Utilize um banco de dados relacional (como **PostgreSQL** ou **MySQL**) ou NoSQL (**MongoDB**).
+- Crie um repositório no **GitHub** para o projeto e mantenha commits frequentes e organizados.
 
-```bash
-$ npm install
-```
+### 2. Modelagem do Banco de Dados
 
-## Compile and run the project
+- **Livros:** Devem conter informações como título, ISBN, descrição, preço, data de publicação, categoria (romance, ficção, técnico, etc.) e estoque.
+- **Autores:** Devem conter nome, biografia e data de nascimento.
+- **Pedidos:** Devem registrar o cliente, data do pedido, itens do pedido (livros comprados e suas quantidades) e valor total.
 
-```bash
-# development
-$ npm run start
+### 3. Funcionalidades Básicas
 
-# watch mode
-$ npm run start:dev
+- CRUD para **Livros** e **Autores**.
+- Relacionamento entre autores e livros, permitindo que um livro tenha um ou mais autores.
+- CRUD para **Pedidos**.
+- Atualização automática de estoque após a criação de um pedido.
 
-# production mode
-$ npm run start:prod
-```
+### 4. Funcionalidades Avançadas
 
-## Run tests
+- Endpoint para buscar livros por **título**, **categoria** ou **autor**.
+- Implementação de filtros de preços e ordenação por data de publicação.
+- Um endpoint para listar os **livros mais vendidos**.
+- Controle de estoque: o sistema não deve permitir criar pedidos para livros com estoque insuficiente.
 
-```bash
-# unit tests
-$ npm run test
+### 5. Autenticação e Autorização
 
-# e2e tests
-$ npm run test:e2e
+- Implementar um sistema de autenticação (JWT ou OAuth) para gerenciar as permissões.
+- Somente usuários autenticados devem conseguir criar, atualizar ou deletar recursos (CRUD).
+- Implementar diferentes níveis de autorização (admin e cliente).
 
-# test coverage
-$ npm run test:cov
-```
+### 6. Testes
 
-## Resources
+- Implementar testes unitários e/ou de integração para garantir a qualidade do código.
+- Testar as principais funcionalidades, como criação de pedidos e controle de estoque.
 
-Check out a few resources that may come in handy when working with NestJS:
+### 7. Documentação
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- Crie uma documentação no `README.md` do repositório com as instruções para executar o projeto localmente.
+- Documente os endpoints usando **Swagger**, **Postman** ou outra ferramenta de documentação de APIs.
 
-## Support
+### 8. Bônus (opcional)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- Implementar paginação nos endpoints de listagem.
+- Criar um script de inicialização (seed) para popular o banco de dados com livros e autores fictícios.
+- Implementar cache para otimizar as consultas de listagem e busca.
+- Deploy do backend em uma plataforma de cloud, como **Heroku**, **AWS** ou **Vercel**.
 
-## Stay in touch
+## Lista de tarefas.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- [x] Configuração do projeto
 
-## License
+  - [x] Utilize Node.js, Python (Django), Java (Spring Boot), ou qualquer outra tecnologia backend de sua escolha.
+  - [x] Utilize um banco de dados relacional (como PostgreSQL ou MySQL) ou NoSQL (MongoDB).
+  - [x] Crie um repositório no GitHub para o projeto e mantenha commits frequentes e organizados.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- [x] Modelagem de dados
+  - [x] Livros: Devem conter informações como título, ISBN, descrição, preço, data de publicação, categoria (romance, ficção, técnico, etc.) e estoque.
+  - [x] Autores: Devem conter nome, biografia e data de nascimento.
+  - [x] Pedidos: Devem registrar o cliente, data do pedido, itens do pedido (livros comprados e suas quantidades) e valor total.
+- [] Funcionalidades básicas
+  - [] CRUD para Livros e Autores.
+  - [x] Relacionamento entre autores e livros, permitindo que um livro tenha um ou mais autores.
+  - [] CRUD para Pedidos.
+  - [] Atualização automática de estoque após a criação de um pedido.
+- [] Funcionalidades Avançadas
+  - [] Endpoint para buscar livros por título, categoria ou autor.
+  - [] Implementação de filtros de preços e ordenação por data de publicação.
+  - [] Um endpoint para listar os livros mais vendidos.
+  - [] Controle de estoque: o sistema não deve permitir criar pedidos para livros com estoque insuficiente.
+- [] Autenticação e Autorização
+  - [] Implementar um sistema de autenticação (JWT ou OAuth) para gerenciar as permissões.
+  - [] Somente usuários autenticados devem conseguir criar, atualizar ou deletar recursos (CRUD).
+  - [] Implementar diferentes níveis de autorização (admin e cliente).
+-
+
+## Critérios de Avaliação
+
+- **Qualidade do Código:** Clareza, organização e boas práticas (lint, clean code).
+- **Estrutura do Projeto:** Arquitetura e modularidade.
+- **Documentação e Testes:** Qualidade dos testes implementados e clareza na documentação.
+- **Funcionalidades Implementadas:** Adesão aos requisitos e criatividade nas funcionalidades extras.
+- **Performance e Eficiência:** Eficiência nas consultas ao banco de dados e controle de estoque.
+
+## Instruções Finais
+
+- Crie um fork deste repositório e desenvolva sua solução na branch `main`.
+- Submeta o link do repositório final através do e-mail de contato.
+- O prazo de entrega é de **7 dias** a partir do recebimento deste desafio.
+
+Boa sorte!
