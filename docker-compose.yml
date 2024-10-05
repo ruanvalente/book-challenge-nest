@@ -1,0 +1,9 @@
+services:
+  mysql:
+    container_name: 'bookchallenge-nest'
+    image: 'docker.io/library/mysql:latest'
+    environment:
+      - 'MYSQL_DATABASE=bookchallenge-nest'
+      - 'MYSQL_ROOT_PASSWORD=1234'
+    ports:
+      - '3306:3306'
