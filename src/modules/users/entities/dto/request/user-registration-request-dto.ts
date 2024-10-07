@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsEnum } from 'class-validator';
-import { UserRole } from 'src/entities/enums/role.enum';
+import { UserRole } from '../../enums/role.enum';
 
 export class UserRegistrationRequestDTO {
   @IsNotEmpty()

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 
 import { DatabaseModule } from './infra/database/database.module';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './infra/auth/auth.module';
 
 @Module({
   imports: [
@@ -12,14 +12,7 @@ import { UsersModule } from './users/users.module';
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
     }),
     DatabaseModule,
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('SECRET_KEY'),
-        signOptions: { expiresIn: '60s' },
-      }),
-      inject: [ConfigService],
-    }),
+    AuthModule,
     UsersModule,
   ],
   providers: [],

@@ -1,10 +1,8 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { UserRegistrationRequestDTO } from 'src/entities/dto/request/user-registration-request-dto';
-import { UserRegistrationResponseDTO } from 'src/entities/dto/response/user-registration-response-dto';
-import { UserRole } from 'src/entities/enums/role.enum';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { AuthService } from 'src/infra/auth/services/auth.service';
+import { UserRegistrationRequestDTO } from '../entities/dto/request/user-registration-request-dto';
+import { UserRegistrationResponseDTO } from '../entities/dto/response/user-registration-response-dto';
 
 @Controller('/api/users')
 export class UserController {
@@ -13,8 +11,7 @@ export class UserController {
     private readonly authService: AuthService,
   ) {}
 
-  @Get()
-  @UseGuards(AuthGuard('jwt'))
+  @Get('list')
   async listUsers(): Promise<any> {
     return this.userService.findAll();
   }
@@ -23,14 +20,7 @@ export class UserController {
   async registerUser(
     @Body() data: UserRegistrationRequestDTO,
   ): Promise<UserRegistrationResponseDTO> {
-    console.log('register user', data);
-
-    const userResponse = await this.userService.registerUser(
-      data.name,
-      data.email,
-      data.password,
-      UserRole.USER,
-    );
+    const userResponse = await this.userService.registerUser(data);
 
     const token = await this.authService.generateToken(userResponse);
 
