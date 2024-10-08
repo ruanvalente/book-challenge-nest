@@ -6,8 +6,8 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { Order } from './order';
-import { Book } from './book';
+import { Order } from './order.entity';
+import { Book } from './book.entity';
 
 @Entity('tb_order_item')
 export class OrderedItem {

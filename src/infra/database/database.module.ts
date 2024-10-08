@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
-import { Author } from 'src/entities/author';
-import { Book } from 'src/entities/book';
-import { Order } from 'src/entities/order';
-import { OrderedItem } from 'src/entities/ordered-item';
-import { Users } from 'src/entities/users';
+import { Users } from 'src/modules/users/entities/users.entity';
+import { Order } from 'src/modules/users/entities/order.entity';
+import { OrderedItem } from 'src/modules/users/entities/ordered-item.entity';
+import { Book } from 'src/modules/users/entities/book.entity';
+import { Author } from 'src/modules/users/entities/author.entity';
 
 @Module({
   imports: [
@@ -31,5 +31,4 @@ import { Users } from 'src/entities/users';
   ],
   exports: [TypeOrmModule],
 })
-// eslint-disable-next-line prettier/prettier
-export class DatabaseModule { }
+export class DatabaseModule {}
