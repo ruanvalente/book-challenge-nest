@@ -1,10 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
-import { Author } from './author.entity';
+import { Author } from '../../users/entities/author.entity';
 
 @Entity('tb_book')
 export class Book {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   title: string;
@@ -15,18 +15,22 @@ export class Book {
   @Column({ type: 'text', nullable: true })
   description: string;
 
-  @Column('decimal')
+  @Column('decimal', { precision: 10, scale: 2, default: 0 })
   price: number;
 
-  @Column({ type: 'date' })
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: true,
+  })
   createdAt: string;
 
   @Column()
   category: string;
 
   @Column('int')
-  estoque: number;
+  stock: number;
 
-  @ManyToMany(() => Author, (author) => author.books, { cascade: true })
+  @ManyToMany(() => Author, (author) => author.books)
   authors: Author[];
 }

@@ -5,7 +5,7 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
-import { Book } from './book.entity';
+import { Book } from '../../books/entities/book.entity';
 
 @Entity('tb_autor')
 export class Author {
@@ -18,14 +18,14 @@ export class Author {
   @Column({ type: 'text', nullable: true })
   bio: string;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', nullable: true })
   birthDate: string;
 
-  @ManyToMany(() => Book)
+  @ManyToMany(() => Book, (book) => book.authors, { cascade: true })
   @JoinTable({
     name: 'book_author',
-    joinColumn: { name: 'author_id' },
-    inverseJoinColumn: { name: 'book_id' },
+    joinColumn: { name: 'author_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'book_id', referencedColumnName: 'id' },
   })
   books: Book[];
 }
