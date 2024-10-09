@@ -1,5 +1,5 @@
+import { Author } from 'src/modules/authors/entities/author.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
-import { Author } from '../../users/entities/author.entity';
 
 @Entity('tb_book')
 export class Book {
@@ -15,14 +15,10 @@ export class Book {
   @Column({ type: 'text', nullable: true })
   description: string;
 
-  @Column('decimal', { precision: 10, scale: 2, default: 0 })
+  @Column('decimal')
   price: number;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    nullable: true,
-  })
+  @Column({ type: 'date' })
   createdAt: string;
 
   @Column()
@@ -31,6 +27,6 @@ export class Book {
   @Column('int')
   stock: number;
 
-  @ManyToMany(() => Author, (author) => author.books)
+  @ManyToMany(() => Author, (author) => author.books, { cascade: true })
   authors: Author[];
 }

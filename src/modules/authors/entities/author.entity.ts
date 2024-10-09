@@ -1,3 +1,4 @@
+import { Book } from 'src/modules/books/entities/book.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -5,12 +6,11 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
-import { Book } from '../../books/entities/book.entity';
 
 @Entity('tb_autor')
 export class Author {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   name: string;
@@ -18,10 +18,17 @@ export class Author {
   @Column({ type: 'text', nullable: true })
   bio: string;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ type: 'date' })
   birthDate: string;
 
-  @ManyToMany(() => Book, (book) => book.authors, { cascade: true })
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: true,
+  })
+  createdAt: string;
+
+  @ManyToMany(() => Book, (book) => book.authors)
   @JoinTable({
     name: 'book_author',
     joinColumn: { name: 'author_id', referencedColumnName: 'id' },

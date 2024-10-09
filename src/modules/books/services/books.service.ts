@@ -3,12 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from '../entities/book.entity';
 import { Repository } from 'typeorm';
 import { CreateBookRequestDTO } from '../dto/request/book-create-request.dto';
+import { Author } from 'src/modules/authors/entities/author.entity';
 
 @Injectable()
 export class BooksService {
   constructor(
     @InjectRepository(Book)
     private readonly bookRepository: Repository<Book>,
+    @InjectRepository(Author)
+    private readonly authorRepository: Repository<Author>,
   ) {}
   async create(createBookDTO: CreateBookRequestDTO): Promise<Book> {
     const book = await this.bookRepository.save(createBookDTO);
@@ -44,6 +47,7 @@ export class BooksService {
     }
     return book;
   }
+
   async update(id: number, data: Book): Promise<Book> {
     const book = await this.bookRepository.findOne({
       where: { id },
@@ -55,11 +59,14 @@ export class BooksService {
     }
 
     if (data.authors) {
-      book.authors = data.authors;
+      const authors = await this.authorRepository.findBy(data.authors);
+      book.authors = authors;
     }
 
     Object.assign(book, data);
+
     await this.bookRepository.save(book);
+
     return book;
   }
 
@@ -70,6 +77,6 @@ export class BooksService {
       throw new NotFoundException(`Book with ID ${id} not found`);
     }
 
-    this.bookRepository.delete(id);
+    await this.bookRepository.delete(id);
   }
 }

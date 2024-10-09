@@ -5,6 +5,7 @@ import { DatabaseModule } from './infra/database/database.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './infra/auth/auth.module';
 import { BooksModule } from './modules/books/books.module';
+import { AuthorsModule } from './modules/authors/authors.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { BooksModule } from './modules/books/books.module';
     AuthModule,
     UsersModule,
     BooksModule,
+    AuthorsModule,
   ],
   providers: [],
 })
