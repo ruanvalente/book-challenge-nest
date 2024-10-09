@@ -1,10 +1,10 @@
+import { Author } from 'src/modules/authors/entities/author.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
-import { Author } from './author.entity';
 
 @Entity('tb_book')
 export class Book {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   title: string;
@@ -25,7 +25,7 @@ export class Book {
   category: string;
 
   @Column('int')
-  estoque: number;
+  stock: number;
 
   @ManyToMany(() => Author, (author) => author.books, { cascade: true })
   authors: Author[];

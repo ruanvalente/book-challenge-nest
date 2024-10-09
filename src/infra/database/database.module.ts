@@ -5,8 +5,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Users } from 'src/modules/users/entities/users.entity';
 import { Order } from 'src/modules/users/entities/order.entity';
 import { OrderedItem } from 'src/modules/users/entities/ordered-item.entity';
-import { Book } from 'src/modules/users/entities/book.entity';
-import { Author } from 'src/modules/users/entities/author.entity';
+import { Author } from 'src/modules/authors/entities/author.entity';
+import { Book } from 'src/modules/books/entities/book.entity';
 
 @Module({
   imports: [

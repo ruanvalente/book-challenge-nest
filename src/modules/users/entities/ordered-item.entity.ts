@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 import { Order } from './order.entity';
-import { Book } from './book.entity';
+import { Book } from '../../books/entities/book.entity';
 
 @Entity('tb_order_item')
 export class OrderedItem {
