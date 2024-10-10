@@ -66,12 +66,26 @@ export class OrdersService {
     return order;
   }
 
-  async findAll(): Promise<Order[]> {
-    const orders = await this.orderRepository.find({
+  async findAll(
+    page: number = 1,
+    limit: number = 10,
+    currentPage: number = 1,
+  ): Promise<{
+    data: Order[];
+    total: number;
+    totalPages: number;
+    currentPage: number;
+  }> {
+    const [data, total] = await this.orderRepository.findAndCount({
       relations: ['orderItems', 'orderItems.book'],
+      take: limit,
+      skip: (page - 1) * limit,
+      order: { orderDateTime: 'DESC' },
     });
 
-    return orders;
+    const totalPages: number = Math.ceil(total / limit);
+
+    return { data, total, currentPage, totalPages };
   }
 
   async findOne(id: number) {
@@ -163,5 +177,31 @@ export class OrdersService {
       this.bookRepository.save(book),
       this.orderedItemRepository.save(orderedItem),
     ]);
+  }
+
+  async remove(id: number): Promise<void> {
+    const order = await this.orderRepository.findOne({
+      where: { id },
+      relations: ['orderItems', 'orderItems.book'],
+    });
+
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${id} not found`);
+    }
+
+    await Promise.all(
+      order.orderItems.map(async (orderedItem) => {
+        const book = orderedItem.book;
+
+        book.stock += orderedItem.quantity;
+
+        await this.bookRepository.save(book);
+      }),
+    );
+
+    await this.orderedItemRepository.delete({
+      order: { id },
+    });
+    await this.orderRepository.delete(id);
   }
 }
