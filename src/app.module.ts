@@ -1,12 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { DatabaseModule } from './infra/database/database.module';
-import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './infra/auth/auth.module';
-import { BooksModule } from './modules/books/books.module';
+import { DatabaseModule } from './infra/database/database.module';
+import { SeedService } from './infra/database/services/seed.service';
 import { AuthorsModule } from './modules/authors/authors.module';
+import { BooksModule } from './modules/books/books.module';
 import { OrdersModule } from './modules/orders/orders.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -23,4 +24,9 @@ import { OrdersModule } from './modules/orders/orders.module';
   ],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements OnModuleInit {
+  constructor(private readonly seedService: SeedService) {}
+  async onModuleInit() {
+    if (process.env.NODE_ENV !== 'production') await this.seedService.run();
+  }
+}

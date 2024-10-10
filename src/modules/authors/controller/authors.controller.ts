@@ -1,16 +1,16 @@
 import {
-  Controller,
-  Post,
   Body,
+  Controller,
+  Delete,
   Get,
-  Query,
   Param,
   Patch,
-  Delete,
+  Post,
+  Query,
 } from '@nestjs/common';
-import { AuthorsService } from '../services/authors.service';
 import { CreateAuthorRequestDTO } from '../dto/request/create-author-request.dto';
 import { Author } from '../entities/author.entity';
+import { AuthorsService } from '../services/authors.service';
 
 @Controller('api/authors')
 export class AuthorsController {

@@ -1,10 +1,10 @@
 import { Book } from 'src/modules/books/entities/book.entity';
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
+  Entity,
   JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity('tb_autor')
