@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Users } from 'src/modules/users/entities/users.entity';
-import { Order } from 'src/modules/users/entities/order.entity';
-import { OrderedItem } from 'src/modules/users/entities/ordered-item.entity';
 import { Author } from 'src/modules/authors/entities/author.entity';
 import { Book } from 'src/modules/books/entities/book.entity';
+import { Order } from 'src/modules/orders/entities/order.entity';
+import { OrderedItem } from 'src/modules/orders/entities/ordered-item.entity';
+import { Users } from 'src/modules/users/entities/users.entity';
+import { SeedService } from './services/seed.service';
 
 @Module({
   imports: [
@@ -28,7 +29,9 @@ import { Book } from 'src/modules/books/entities/book.entity';
         synchronize: true,
       }),
     }),
+    TypeOrmModule.forFeature([Author, Book, Order, OrderedItem, Users]),
   ],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, SeedService],
+  providers: [SeedService],
 })
 export class DatabaseModule {}

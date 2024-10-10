@@ -1,16 +1,20 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { OrderedItem } from './ordered-item.entity';
 
 @Entity('tb_order')
 export class Order {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   client: string;
 
-  @Column({ type: 'timestamp' })
-  orderDateTime: Date;
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: true,
+  })
+  orderDateTime: string;
 
   @Column('decimal', { precision: 10, scale: 2, default: 0 })
   totalAmount: number;

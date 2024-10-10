@@ -1,10 +1,10 @@
 import { Book } from 'src/modules/books/entities/book.entity';
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
+  Entity,
   JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity('tb_autor')
@@ -18,7 +18,11 @@ export class Author {
   @Column({ type: 'text', nullable: true })
   bio: string;
 
-  @Column({ type: 'date' })
+  @Column({
+    type: 'date',
+    default: () => null,
+    nullable: true,
+  })
   birthDate: string;
 
   @Column({

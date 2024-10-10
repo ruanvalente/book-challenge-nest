@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { UserService } from '../services/user.service';
 import { AuthService } from 'src/infra/auth/services/auth.service';
 import { UserRegistrationRequestDTO } from '../entities/dto/request/user-registration-request-dto';
 import { UserRegistrationResponseDTO } from '../entities/dto/response/user-registration-response-dto';
+import { UserService } from '../services/user.service';
 
 @Controller('/api/users')
 export class UserController {

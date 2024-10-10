@@ -1,5 +1,5 @@
 import { Author } from 'src/modules/authors/entities/author.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('tb_book')
 export class Book {
@@ -18,7 +18,11 @@ export class Book {
   @Column('decimal')
   price: number;
 
-  @Column({ type: 'date' })
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: true,
+  })
   createdAt: string;
 
   @Column()

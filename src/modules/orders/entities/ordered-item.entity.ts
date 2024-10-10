@@ -1,13 +1,13 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { Order } from './order.entity';
 import { Book } from '../../books/entities/book.entity';
+import { Order } from './order.entity';
 
 @Entity('tb_order_item')
 export class OrderedItem {
