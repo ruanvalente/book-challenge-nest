@@ -18,7 +18,11 @@ export class Author {
   @Column({ type: 'text', nullable: true })
   bio: string;
 
-  @Column({ type: 'date' })
+  @Column({
+    type: 'date',
+    default: () => null,
+    nullable: true,
+  })
   birthDate: string;
 
   @Column({

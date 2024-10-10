@@ -18,7 +18,11 @@ export class Book {
   @Column('decimal')
   price: number;
 
-  @Column({ type: 'date' })
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: true,
+  })
   createdAt: string;
 
   @Column()

@@ -9,8 +9,12 @@ export class Order {
   @Column()
   client: string;
 
-  @Column({ type: 'timestamp' })
-  orderDateTime: Date;
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: true,
+  })
+  orderDateTime: string;
 
   @Column('decimal', { precision: 10, scale: 2, default: 0 })
   totalAmount: number;
