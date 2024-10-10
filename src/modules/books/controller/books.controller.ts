@@ -29,6 +29,9 @@ export class BooksController {
     @Query('title') title: string = '',
     @Query('category') category: string = '',
     @Query('author') author: string = '',
+    @Query('minPrice') minPrice?: number,
+    @Query('maxPrice') maxPrice?: number,
+    @Query('sortBy') sortBy: 'ASC' | 'DESC' = 'DESC',
   ): Promise<{
     data: Book[];
     total: number;
@@ -45,6 +48,9 @@ export class BooksController {
       title,
       category,
       author,
+      minPrice,
+      maxPrice,
+      sortBy,
     );
   }
 

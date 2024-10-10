@@ -1,17 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Author } from 'src/modules/authors/entities/author.entity';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateBookRequestDTO } from '../dto/request/book-create-request.dto';
 import { Book } from '../entities/book.entity';
+import { BookFilterUtils } from '../utils/book-filters.utils';
 
 @Injectable()
 export class BooksService {
   constructor(
     @InjectRepository(Book)
     private readonly bookRepository: Repository<Book>,
+
     @InjectRepository(Author)
     private readonly authorRepository: Repository<Author>,
+
+    private readonly bookFilterUtils: BookFilterUtils,
   ) {}
   async create(createBookDTO: CreateBookRequestDTO): Promise<Book> {
     const book = await this.bookRepository.save(createBookDTO);
@@ -25,36 +29,28 @@ export class BooksService {
     title?: string,
     category?: string,
     author?: string,
+    minPrice?: number,
+    maxPrice?: number,
+    sortBy: 'ASC' | 'DESC' = 'DESC',
   ): Promise<{
     data: Book[];
     total: number;
     totalPages: number;
     currentPage: number;
   }> {
-    const where: FindOptionsWhere<Book> = {};
-
-    if (title) {
-      where.title = title.trim();
-    }
-
-    if (category) {
-      where.category = category.trim();
-    }
-
-    if (author) {
-      const authors = await this.authorRepository.find({
-        where: { name: author.trim() },
-      });
-      if (authors.length) {
-        where.authors = authors;
-      }
-    }
+    const where = await this.bookFilterUtils.buildWhereClause(
+      title,
+      category,
+      author,
+      minPrice,
+      maxPrice,
+    );
 
     const [data, total] = await this.bookRepository.findAndCount({
       where,
       take: limit,
       skip: (page - 1) * limit,
-      order: { createdAt: 'DESC' },
+      order: { createdAt: sortBy },
     });
 
     const totalPages: number = Math.ceil(total / limit);
