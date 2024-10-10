@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Author } from 'src/modules/authors/entities/author.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { CreateBookRequestDTO } from '../dto/request/book-create-request.dto';
 import { Book } from '../entities/book.entity';
 
@@ -22,13 +22,36 @@ export class BooksService {
     page: number = 1,
     limit: number = 10,
     currentPage: number = 1,
+    title?: string,
+    category?: string,
+    author?: string,
   ): Promise<{
     data: Book[];
     total: number;
     totalPages: number;
     currentPage: number;
   }> {
+    const where: FindOptionsWhere<Book> = {};
+
+    if (title) {
+      where.title = title.trim();
+    }
+
+    if (category) {
+      where.category = category.trim();
+    }
+
+    if (author) {
+      const authors = await this.authorRepository.find({
+        where: { name: author.trim() },
+      });
+      if (authors.length) {
+        where.authors = authors;
+      }
+    }
+
     const [data, total] = await this.bookRepository.findAndCount({
+      where,
       take: limit,
       skip: (page - 1) * limit,
       order: { createdAt: 'DESC' },
