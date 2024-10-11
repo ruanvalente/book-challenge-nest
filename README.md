@@ -72,12 +72,13 @@ Você foi contratado para desenvolver a API backend de um sistema de livraria. E
   - [x] Relacionamento entre autores e livros, permitindo que um livro tenha um ou mais autores.
   - [X] CRUD para Pedidos.
   - [X] Atualização automática de estoque após a criação de um pedido.
-- [] Funcionalidades Avançadas
+- [x] Funcionalidades Avançadas
   - [x] Endpoint para buscar livros por título, categoria ou autor.
   - [x] Implementação de filtros de preços e ordenação por data de publicação.
   - [x] Um endpoint para listar os livros mais vendidos.
   - [x] Controle de estoque: o sistema não deve permitir criar pedidos para livros com estoque insuficiente.
 - [] Autenticação e Autorização
+  - [x] Documentar os endpoints do projeto
   - [] Implementar um sistema de autenticação (JWT ou OAuth) para gerenciar as permissões.
   - [] Somente usuários autenticados devem conseguir criar, atualizar ou deletar recursos (CRUD).
   - [] Implementar diferentes níveis de autorização (admin e cliente).
