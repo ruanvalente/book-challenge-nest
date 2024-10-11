@@ -67,7 +67,7 @@ Você foi contratado para desenvolver a API backend de um sistema de livraria. E
   - [x] Livros: Devem conter informações como título, ISBN, descrição, preço, data de publicação, categoria (romance, ficção, técnico, etc.) e estoque.
   - [x] Autores: Devem conter nome, biografia e data de nascimento.
   - [x] Pedidos: Devem registrar o cliente, data do pedido, itens do pedido (livros comprados e suas quantidades) e valor total.
-- [] Funcionalidades básicas
+- [x] Funcionalidades básicas
   - [X] CRUD para Livros e Autores.
   - [x] Relacionamento entre autores e livros, permitindo que um livro tenha um ou mais autores.
   - [X] CRUD para Pedidos.
