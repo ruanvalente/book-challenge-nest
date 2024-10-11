@@ -8,6 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+
 import { CreateBookRequestDTO } from '../dto/request/book-create-request.dto';
 import { Book } from '../entities/book.entity';
 import { BooksService } from '../services/books.service';
@@ -15,6 +16,11 @@ import { BooksService } from '../services/books.service';
 @Controller('api/books')
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
+
+  @Get('best-sellers')
+  async findBestSellers(@Query('limit') limit: number = 10): Promise<any> {
+    return await this.booksService.findBestSellingBooks(limit);
+  }
 
   @Post()
   create(@Body() data: CreateBookRequestDTO) {
@@ -26,13 +32,32 @@ export class BooksController {
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
     @Query('currentPage') currentPage: number = Number(page),
+    @Query('title') title: string = '',
+    @Query('category') category: string = '',
+    @Query('author') author: string = '',
+    @Query('minPrice') minPrice?: number,
+    @Query('maxPrice') maxPrice?: number,
+    @Query('sortBy') sortBy: 'ASC' | 'DESC' = 'DESC',
   ): Promise<{
     data: Book[];
     total: number;
     totalPages: number;
     currentPage: number;
+    title?: string;
+    category?: string;
+    author?: string;
   }> {
-    return this.booksService.findAll(page, limit, currentPage);
+    return this.booksService.findAll(
+      page,
+      limit,
+      currentPage,
+      title,
+      category,
+      author,
+      minPrice,
+      maxPrice,
+      sortBy,
+    );
   }
 
   @Get(':id')

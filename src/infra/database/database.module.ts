@@ -7,6 +7,7 @@ import { Book } from 'src/modules/books/entities/book.entity';
 import { Order } from 'src/modules/orders/entities/order.entity';
 import { OrderedItem } from 'src/modules/orders/entities/ordered-item.entity';
 import { Users } from 'src/modules/users/entities/users.entity';
+
 import { SeedService } from './services/seed.service';
 
 @Module({

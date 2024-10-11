@@ -1,4 +1,5 @@
 import { IsArray, IsNotEmpty, IsOptional } from 'class-validator';
+
 import { Author } from 'src/modules/authors/entities/author.entity';
 
 export class CreateBookRequestDTO {

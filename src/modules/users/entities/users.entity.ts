@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
 import { UserRole } from './enums/role.enum';
 
 @Entity('tb_user')
