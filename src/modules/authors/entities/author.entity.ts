@@ -1,4 +1,3 @@
-import { Book } from 'src/modules/books/entities/book.entity';
 import {
   Column,
   Entity,
@@ -6,6 +5,8 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { Book } from 'src/modules/books/entities/book.entity';
 
 @Entity('tb_autor')
 export class Author {

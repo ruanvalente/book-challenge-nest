@@ -1,8 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Author } from 'src/modules/authors/entities/author.entity';
 import { Repository } from 'typeorm';
+
+import { Author } from 'src/modules/authors/entities/author.entity';
+
 import { CreateBookRequestDTO } from '../dto/request/book-create-request.dto';
+import { BestSellerResponseBookDTO } from '../dto/response/best-sellers-respose.dto';
 import { Book } from '../entities/book.entity';
 import { BookFilterUtils } from '../utils/book-filters.utils';
 
@@ -97,5 +100,38 @@ export class BooksService {
     }
 
     await this.bookRepository.delete(id);
+  }
+
+  async findBestSellingBooks(
+    limit: number = 10,
+  ): Promise<BestSellerResponseBookDTO[]> {
+    const bestSellers = await this.bookRepository
+      .createQueryBuilder('book')
+      .leftJoin('book.orderedItems', 'orderedItem')
+      .select([
+        'book.id',
+        'book.title',
+        'book.price',
+        'book.createdAt',
+        'book.category',
+        'book.stock',
+      ])
+      .addSelect('SUM(orderedItem.quantity)', 'totalSold')
+      .groupBy('book.id')
+      .orderBy('totalSold', 'DESC')
+      .limit(limit)
+      .getRawMany();
+
+    return bestSellers.map(
+      (item) =>
+        new BestSellerResponseBookDTO({
+          id: item.book_id,
+          title: item.book_title,
+          price: item.book_price,
+          category: item.book_category,
+          stock: item.book_stock,
+          totalSold: Number(item.totalSold),
+        }),
+    );
   }
 }

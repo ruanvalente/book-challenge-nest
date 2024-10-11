@@ -1,5 +1,13 @@
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
 import { Author } from 'src/modules/authors/entities/author.entity';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { OrderedItem } from 'src/modules/orders/entities/ordered-item.entity';
 
 @Entity('tb_book')
 export class Book {
@@ -33,4 +41,7 @@ export class Book {
 
   @ManyToMany(() => Author, (author) => author.books, { cascade: true })
   authors: Author[];
+
+  @OneToMany(() => OrderedItem, (orderItem) => orderItem.book)
+  orderedItems: OrderedItem[];
 }

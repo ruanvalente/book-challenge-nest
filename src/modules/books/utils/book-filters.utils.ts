@@ -1,5 +1,4 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Author } from 'src/modules/authors/entities/author.entity';
 import {
   Between,
   FindOptionsWhere,
@@ -7,6 +6,9 @@ import {
   MoreThanOrEqual,
   Repository,
 } from 'typeorm';
+
+import { Author } from 'src/modules/authors/entities/author.entity';
+
 import { Book } from '../entities/book.entity';
 
 export class BookFilterUtils {

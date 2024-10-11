@@ -8,6 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+
 import { CreateBookRequestDTO } from '../dto/request/book-create-request.dto';
 import { Book } from '../entities/book.entity';
 import { BooksService } from '../services/books.service';
@@ -15,6 +16,11 @@ import { BooksService } from '../services/books.service';
 @Controller('api/books')
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
+
+  @Get('best-sellers')
+  async findBestSellers(@Query('limit') limit: number = 10): Promise<any> {
+    return await this.booksService.findBestSellingBooks(limit);
+  }
 
   @Post()
   create(@Body() data: CreateBookRequestDTO) {
