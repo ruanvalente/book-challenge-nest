@@ -75,7 +75,7 @@ Você foi contratado para desenvolver a API backend de um sistema de livraria. E
 - [] Funcionalidades Avançadas
   - [x] Endpoint para buscar livros por título, categoria ou autor.
   - [x] Implementação de filtros de preços e ordenação por data de publicação.
-  - [] Um endpoint para listar os livros mais vendidos.
+  - [x] Um endpoint para listar os livros mais vendidos.
   - [x] Controle de estoque: o sistema não deve permitir criar pedidos para livros com estoque insuficiente.
 - [] Autenticação e Autorização
   - [] Implementar um sistema de autenticação (JWT ou OAuth) para gerenciar as permissões.
