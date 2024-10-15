@@ -29,7 +29,7 @@ export class UserRegistrationRequestDTO {
   @IsOptional()
   @IsEnum(UserRole)
   @ApiProperty({
-    example: UserRole.USER,
+    example: UserRole.CLIENT,
     description: 'Role do usuário',
     required: false,
   })
