@@ -81,7 +81,7 @@ Você foi contratado para desenvolver a API backend de um sistema de livraria. E
   - [x] Documentar os endpoints do projeto
   - [x] Implementar um sistema de autenticação (JWT ou OAuth) para gerenciar as permissões.
   - [x] Somente usuários autenticados devem conseguir criar, atualizar ou deletar recursos (CRUD).
-  - [] Implementar diferentes níveis de autorização (admin e cliente).
+  - [x] Implementar diferentes níveis de autorização (admin e cliente).
 -
 
 ## Critérios de Avaliação
