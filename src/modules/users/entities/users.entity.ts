@@ -35,6 +35,13 @@ export class Users {
     enum: UserRole,
     default: UserRole.CLIENT,
   })
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: true,
+  })
+  createdAt: string;
+
   @ApiPropertyOptional({
     example: UserRole.CLIENT,
     description: 'Role do usuário',
