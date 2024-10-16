@@ -14,7 +14,7 @@ export class AuthController {
   @ApiBody({
     schema: {
       example: {
-        username: 'john_doe',
+        name: 'john_doe',
         email: 'john@example.com',
         password: 'password123',
       },
@@ -37,7 +37,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Autenticar e gerar um token JWT' })
   @ApiBody({
     schema: {
-      example: { username: 'john_doe', password: 'password123' },
+      example: { email: 'john@example.com', password: 'password123' },
     },
   })
   @ApiResponse({

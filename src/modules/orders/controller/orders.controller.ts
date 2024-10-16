@@ -10,6 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
@@ -29,6 +30,7 @@ import { OrdersService } from '../services/orders.service';
 
 @Controller('api/orders')
 @ApiTags('orders')
+@ApiBearerAuth()
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 

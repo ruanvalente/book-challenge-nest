@@ -27,6 +27,7 @@ export class AuthService {
     const existingUser = await this.userRepository.findOne({
       where: { email },
     });
+
     if (existingUser) {
       throw new ConflictException('Username already exists');
     }
@@ -52,7 +53,8 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload = { username: user.name, sub: user.id };
+    const payload = { username: user.name, sub: user.id, role: user.role };
+
     return {
       access_token: this.jwtService.sign(payload),
     };
