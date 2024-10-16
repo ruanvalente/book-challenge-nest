@@ -7,14 +7,21 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Roles } from 'src/infra/auth/guards/decorators/roles.decorator';
+import { JwtGuard } from 'src/infra/auth/guards/jwt.guard';
+import { RolesGuard } from 'src/infra/auth/guards/roles.guard';
+
+import { UserRole } from 'src/modules/users/entities/enums/role.enum';
 
 import { CreateAuthorRequestDTO } from '../dto/request/create-author-request.dto';
 import { Author } from '../entities/author.entity';
@@ -22,10 +29,13 @@ import { AuthorsService } from '../services/authors.service';
 
 @Controller('api/authors')
 @ApiTags('author')
+@ApiBearerAuth()
 export class AuthorsController {
   constructor(private readonly authorsService: AuthorsService) {}
 
   @Post()
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Cria um novo autor' })
   @ApiParam({
     name: 'data',
@@ -80,6 +90,7 @@ export class AuthorsController {
   }
 
   @Get(':id')
+  @UseGuards(JwtGuard)
   @ApiOperation({ summary: 'Obtem um autor pelo seu ID' })
   @ApiParam({
     name: 'id',
@@ -93,6 +104,8 @@ export class AuthorsController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Atualiza um autor pelo seu ID' })
   @ApiBody({
     description: 'Objeto com os dados do autor para atualização',
@@ -114,6 +127,8 @@ export class AuthorsController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Remove um autor pelo seu ID' })
   @ApiParam({
     name: 'id',

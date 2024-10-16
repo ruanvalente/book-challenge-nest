@@ -7,14 +7,21 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Roles } from 'src/infra/auth/guards/decorators/roles.decorator';
+import { JwtGuard } from 'src/infra/auth/guards/jwt.guard';
+import { RolesGuard } from 'src/infra/auth/guards/roles.guard';
+
+import { UserRole } from 'src/modules/users/entities/enums/role.enum';
 
 import { CreateBookRequestDTO } from '../dto/request/book-create-request.dto';
 import { BestSellerResponseBookDTO } from '../dto/response/best-sellers-respose.dto';
@@ -23,6 +30,7 @@ import { BooksService } from '../services/books.service';
 
 @ApiTags('books')
 @Controller('api/books')
+@ApiBearerAuth()
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
@@ -46,6 +54,8 @@ export class BooksController {
   }
 
   @Post()
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Criar um novo livro' })
   @ApiBody({ description: 'Dados do novo livro', type: CreateBookRequestDTO })
   @ApiResponse({
@@ -141,6 +151,7 @@ export class BooksController {
   }
 
   @Get(':id')
+  @UseGuards(JwtGuard)
   @ApiOperation({ summary: 'Obtem um livro pelo ID' })
   @ApiParam({ name: 'id', description: 'ID do livro a ser retornado' })
   @ApiResponse({ status: 200, description: 'Livro encontrado.', type: Book })
@@ -150,6 +161,8 @@ export class BooksController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Atualiza um livro pelo ID' })
   @ApiParam({ name: 'id', description: 'ID do livro a ser atualizado' })
   @ApiResponse({
@@ -164,6 +177,8 @@ export class BooksController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Remove um livro pelo ID' })
   @ApiParam({ name: 'id', description: 'ID do livro a ser removido' })
   @ApiResponse({

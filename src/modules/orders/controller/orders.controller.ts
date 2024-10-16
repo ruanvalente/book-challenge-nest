@@ -7,14 +7,21 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Roles } from 'src/infra/auth/guards/decorators/roles.decorator';
+import { JwtGuard } from 'src/infra/auth/guards/jwt.guard';
+import { RolesGuard } from 'src/infra/auth/guards/roles.guard';
+
+import { UserRole } from 'src/modules/users/entities/enums/role.enum';
 
 import { CreateOrderRequestDTO } from '../dto/create-order.dto';
 import { UpdateOrderDto } from '../dto/update-order.dto';
@@ -23,10 +30,13 @@ import { OrdersService } from '../services/orders.service';
 
 @Controller('api/orders')
 @ApiTags('orders')
+@ApiBearerAuth()
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Cria uma nova ordem' })
   @ApiBody({
     type: CreateOrderRequestDTO,
@@ -104,6 +114,7 @@ export class OrdersController {
   }
 
   @Get(':id')
+  @UseGuards(JwtGuard)
   @ApiOperation({ summary: 'Obtem uma ordem pelo seu ID' })
   @ApiResponse({
     status: 200,
@@ -127,6 +138,8 @@ export class OrdersController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Atualiza uma ordem pelo seu ID' })
   @ApiResponse({
     status: 200,
@@ -154,6 +167,8 @@ export class OrdersController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Remove uma ordem pelo seu ID' })
   @ApiResponse({
     status: 204,

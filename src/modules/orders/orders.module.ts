@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from 'src/infra/auth/auth.module';
 
 import { Book } from '../books/entities/book.entity';
 import { OrdersController } from './controller/orders.controller';
@@ -9,7 +10,7 @@ import { OrdersService } from './services/orders.service';
 import { OrderValidation } from './validations/orders.validations';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Order, OrderedItem, Book])],
+  imports: [TypeOrmModule.forFeature([Order, OrderedItem, Book]), AuthModule],
   controllers: [OrdersController],
   exports: [OrdersService, OrderValidation],
   providers: [OrdersService, OrderValidation],
