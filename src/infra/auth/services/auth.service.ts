@@ -3,6 +3,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
@@ -15,6 +16,7 @@ import { Users } from 'src/modules/users/entities/users.entity';
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
+    private configService: ConfigService,
     @InjectRepository(Users)
     private readonly userRepository: Repository<Users>,
   ) {}
@@ -55,8 +57,20 @@ export class AuthService {
 
     const payload = { username: user.name, sub: user.id, role: user.role };
 
+    const secret = this.configService.get<string>(
+      'JWT_SECRET',
+      'default_secret',
+    );
+    const expiresIn = this.configService.get<string>('JWT_EXPIRES_IN', '60m');
+
+    const token = this.jwtService.sign(payload, {
+      secret,
+      algorithm: 'HS256',
+      expiresIn,
+    });
+
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: token,
     };
   }
 }

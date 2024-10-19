@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Patch,
+  Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -20,16 +21,49 @@ import { Roles } from 'src/infra/auth/guards/decorators/roles.decorator';
 import { JwtGuard } from 'src/infra/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/infra/auth/guards/roles.guard';
 
+import { UserResponseDTO } from '../entities/dto/response/user.response.dto';
 import { UserRole } from '../entities/enums/role.enum';
 import { Users } from '../entities/users.entity';
 import { UserService } from '../services/user.service';
 
-@Controller('api/users')
 @ApiTags('users')
+@Controller('api/users')
 @ApiBearerAuth()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Post()
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.CLIENT)
+  @ApiOperation({ summary: 'Cria um novo usuário' })
+  @ApiBody({
+    schema: {
+      example: {
+        name: 'john_doe',
+        email: 'john@example.com',
+        password: 'password123',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Usuário criado com sucesso.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Não foi possível realizar a criação do usuário.',
+  })
+  @ApiResponse({
+    status: 422,
+    description: 'Os dados fornecidos não são válidos.',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Ocorreu um erro interno.',
+  })
+  async create(@Body() data: Users): Promise<Users> {
+    return this.userService.create(data);
+  }
   @Get()
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.CLIENT)
@@ -56,7 +90,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Usuários retornados com sucesso.',
-    type: [Users],
+    type: [UserResponseDTO],
   })
   @ApiResponse({
     status: 404,
@@ -67,7 +101,7 @@ export class UserController {
     @Query('limit') limit: number = 10,
     @Query('currentPage') currentPage: number = Number(page),
   ): Promise<{
-    data: Users[];
+    data: UserResponseDTO[];
     total: number;
     totalPages: number;
     currentPage: number;
@@ -84,7 +118,11 @@ export class UserController {
     description: 'ID do usuário a ser retornado',
     type: 'integer',
   })
-  @ApiResponse({ status: 200, description: 'Usuário encontrado.', type: Users })
+  @ApiResponse({
+    status: 200,
+    description: 'Usuário encontrado.',
+    type: UserResponseDTO,
+  })
   @ApiResponse({ status: 404, description: 'Usuário não encontrado.' })
   async findOne(@Param('id') id: string) {
     return await this.userService.findOne(Number(id));

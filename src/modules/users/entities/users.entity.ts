@@ -31,11 +31,6 @@ export class Users {
   password: string;
 
   @Column({
-    type: 'enum',
-    enum: UserRole,
-    default: UserRole.CLIENT,
-  })
-  @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
     nullable: true,
@@ -47,6 +42,11 @@ export class Users {
     description: 'Role do usuário',
     enum: UserRole,
     required: false,
+  })
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.CLIENT,
   })
   role: UserRole;
 }
