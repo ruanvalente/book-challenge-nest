@@ -17,10 +17,10 @@ import { UsersModule } from './modules/users/users.module';
     }),
     DatabaseModule,
     AuthModule,
-    UsersModule,
     BooksModule,
     AuthorsModule,
     OrdersModule,
+    UsersModule,
   ],
   providers: [],
 })

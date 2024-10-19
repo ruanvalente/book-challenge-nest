@@ -9,7 +9,7 @@ import { Users } from 'src/modules/users/entities/users.entity';
 import { AuthController } from './controller/auth.controller';
 import { RolesGuard } from './guards/roles.guard';
 import { AuthService } from './services/auth.service';
-import { JwtStrategy } from './services/jwt.strategy';
+import { JwtStrategy } from './strategy/jwt/jwt.strategy';
 
 @Module({
   imports: [

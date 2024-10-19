@@ -77,7 +77,7 @@ Você foi contratado para desenvolver a API backend de um sistema de livraria. E
   - [x] Implementação de filtros de preços e ordenação por data de publicação.
   - [x] Um endpoint para listar os livros mais vendidos.
   - [x] Controle de estoque: o sistema não deve permitir criar pedidos para livros com estoque insuficiente.
-- [] Autenticação e Autorização
+- [x] Autenticação e Autorização
   - [x] Documentar os endpoints do projeto
   - [x] Implementar um sistema de autenticação (JWT ou OAuth) para gerenciar as permissões.
   - [x] Somente usuários autenticados devem conseguir criar, atualizar ou deletar recursos (CRUD).
