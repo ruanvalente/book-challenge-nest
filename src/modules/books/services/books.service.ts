@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -11,18 +16,26 @@ import { BookFilterUtils } from '../utils/book-filters.utils';
 
 @Injectable()
 export class BooksService {
+  private readonly logger = new Logger(BooksService.name);
+
   constructor(
     @InjectRepository(Book)
     private readonly bookRepository: Repository<Book>,
-
     @InjectRepository(Author)
     private readonly authorRepository: Repository<Author>,
-
     private readonly bookFilterUtils: BookFilterUtils,
   ) {}
+
   async create(createBookDTO: CreateBookRequestDTO): Promise<Book> {
-    const book = await this.bookRepository.save(createBookDTO);
-    return book;
+    try {
+      const book = await this.bookRepository.save(createBookDTO);
+      return book;
+    } catch (error) {
+      this.logger.error('Erro ao criar um livro', error.stack);
+      throw new InternalServerErrorException(
+        'Ocorreu um erro ao criar o livro. Tente novamente mais tarde.',
+      );
+    }
   }
 
   async findAll(
@@ -41,97 +54,139 @@ export class BooksService {
     totalPages: number;
     currentPage: number;
   }> {
-    const where = await this.bookFilterUtils.buildWhereClause(
-      title,
-      category,
-      author,
-      minPrice,
-      maxPrice,
-    );
+    try {
+      const where = await this.bookFilterUtils.buildWhereClause(
+        title,
+        category,
+        author,
+        minPrice,
+        maxPrice,
+      );
 
-    const [data, total] = await this.bookRepository.findAndCount({
-      where,
-      take: limit,
-      skip: (page - 1) * limit,
-      order: { createdAt: sortBy },
-    });
+      const [data, total] = await this.bookRepository.findAndCount({
+        where,
+        take: limit,
+        skip: (page - 1) * limit,
+        order: { createdAt: sortBy },
+      });
 
-    const totalPages: number = Math.ceil(total / limit);
-
-    return { data, total, currentPage, totalPages };
+      const totalPages: number = Math.ceil(total / limit);
+      return { data, total, currentPage, totalPages };
+    } catch (error) {
+      this.logger.error('Erro ao buscar livros', error.stack);
+      throw new InternalServerErrorException(
+        'Ocorreu um erro ao buscar os livros. Tente novamente mais tarde.',
+      );
+    }
   }
 
   async findOne(id: number): Promise<Book> {
-    const book = await this.bookRepository.findOne({ where: { id } });
-
-    if (!book) {
-      throw new NotFoundException(`Book with ID ${id} not found`);
+    try {
+      const book = await this.bookRepository.findOne({ where: { id } });
+      if (!book) {
+        throw new NotFoundException(`Livro com ID ${id} não encontrado`);
+      }
+      return book;
+    } catch (error) {
+      this.logger.error(`Erro ao buscar o livro com ID ${id}`, error.stack);
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(
+        'Ocorreu um erro ao buscar o livro. Tente novamente mais tarde.',
+      );
     }
-    return book;
   }
 
   async update(id: number, data: Book): Promise<Book> {
-    const book = await this.bookRepository.findOne({
-      where: { id },
-      relations: ['authors'],
-    });
+    try {
+      const book = await this.bookRepository.findOne({
+        where: { id },
+        relations: ['authors'],
+      });
 
-    if (!book) {
-      throw new NotFoundException(`Book with ID ${id} not found`);
+      if (!book) {
+        throw new NotFoundException(`Livro com ID ${id} não encontrado`);
+      }
+
+      if (data.authors) {
+        const authors = await this.authorRepository.findBy(data.authors);
+        book.authors = authors;
+      }
+
+      Object.assign(book, data);
+
+      await this.bookRepository.save(book);
+      return book;
+    } catch (error) {
+      this.logger.error(`Erro ao atualizar o livro com ID ${id}`, error.stack);
+
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(
+        'Ocorreu um erro ao atualizar o livro. Tente novamente mais tarde.',
+      );
     }
-
-    if (data.authors) {
-      const authors = await this.authorRepository.findBy(data.authors);
-      book.authors = authors;
-    }
-
-    Object.assign(book, data);
-
-    await this.bookRepository.save(book);
-
-    return book;
   }
 
-  async remove(id: number) {
-    const book = await this.bookRepository.findOne({ where: { id } });
+  async remove(id: number): Promise<void> {
+    try {
+      const book = await this.bookRepository.findOne({ where: { id } });
 
-    if (!book) {
-      throw new NotFoundException(`Book with ID ${id} not found`);
+      if (!book) {
+        throw new NotFoundException(`Livro com ID ${id} não encontrado`);
+      }
+
+      await this.bookRepository.delete(id);
+    } catch (error) {
+      this.logger.error(`Erro ao remover o livro com ID ${id}`, error.stack);
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(
+        'Ocorreu um erro ao remover o livro. Tente novamente mais tarde.',
+      );
     }
-
-    await this.bookRepository.delete(id);
   }
 
   async findBestSellingBooks(
     limit: number = 10,
   ): Promise<BestSellerResponseBookDTO[]> {
-    const bestSellers = await this.bookRepository
-      .createQueryBuilder('book')
-      .leftJoin('book.orderedItems', 'orderedItem')
-      .select([
-        'book.id',
-        'book.title',
-        'book.price',
-        'book.createdAt',
-        'book.category',
-        'book.stock',
-      ])
-      .addSelect('SUM(orderedItem.quantity)', 'totalSold')
-      .groupBy('book.id')
-      .orderBy('totalSold', 'DESC')
-      .limit(limit)
-      .getRawMany();
+    try {
+      const bestSellers = await this.bookRepository
+        .createQueryBuilder('book')
+        .leftJoin('book.orderedItems', 'orderedItem')
+        .select([
+          'book.id',
+          'book.title',
+          'book.price',
+          'book.createdAt',
+          'book.category',
+          'book.stock',
+        ])
+        .addSelect('SUM(orderedItem.quantity)', 'totalSold')
+        .groupBy('book.id')
+        .orderBy('totalSold', 'DESC')
+        .limit(limit)
+        .getRawMany();
 
-    return bestSellers.map(
-      (item) =>
-        new BestSellerResponseBookDTO({
-          id: item.book_id,
-          title: item.book_title,
-          price: item.book_price,
-          category: item.book_category,
-          stock: item.book_stock,
-          totalSold: Number(item.totalSold),
-        }),
-    );
+      return bestSellers.map(
+        (item) =>
+          new BestSellerResponseBookDTO({
+            id: item.book_id,
+            title: item.book_title,
+            price: item.book_price,
+            category: item.book_category,
+            stock: item.book_stock,
+            totalSold: Number(item.totalSold),
+          }),
+      );
+    } catch (error) {
+      this.logger.error('Erro ao buscar os livros mais vendidos', error.stack);
+      throw new InternalServerErrorException(
+        'Ocorreu um erro ao buscar os livros mais vendidos. Tente novamente mais tarde.',
+      );
+    }
   }
 }
