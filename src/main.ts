@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
+import { CustomLoggerService } from './infra/logger/custom-logger/custom-logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,6 +20,10 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
 
+  const customLogger = app.get(CustomLoggerService);
+  customLogger.setLogLevels(['log', 'error', 'warn']);
+
+  app.useLogger(customLogger);
   await app.listen(3000);
 }
 bootstrap();
